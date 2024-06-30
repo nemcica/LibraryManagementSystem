@@ -252,7 +252,7 @@ int main() {
 					cout << it->getInfo();
 				}
 				break;
-				s
+			
 			case 4:
 				cout << "Enter user name or ID: " << flush;
 				getline(cin >> ws, userID);
