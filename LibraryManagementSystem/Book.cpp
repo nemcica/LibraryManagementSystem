@@ -25,10 +25,10 @@ Book::Book(string title, string author, int release, string id, bool borrowed, c
 }
 
 //Getters:
-string Book::getId() {
+string Book::getId() const {
 	return id;
 }
-string Book::getInfo() {
+string Book::getInfo() const {
 	stringstream SS;
 
 	SS << "Title: " << title << " | Author: " << author << endl;
@@ -38,13 +38,17 @@ string Book::getInfo() {
 
 	return SS.str();
 }
-bool Book::getBorrowed() {
+string Book::getTitle() const {
+	return title;
+}
+bool Book::getBorrowed() const {
 	return borrowed;
 }
-bool Book::getOverdue() {
+bool Book::getOverdue() const {
+
 	return isOverdue;
 }
-int Book::getDaysOverdue() {
+int Book::getDaysOverdue() const {
 	return daysOverdue;
 }
 
@@ -68,6 +72,9 @@ void Book::setNewId() {
 	SS << *(author.begin()) << *(title.begin()) << '-' << to_string(release) << '-' << SSid.str();
 	id = SS.str();
 }
+void Book::extendLoan() {
+	dueDate += chrono::months(1);
+}
 
 //Misc:
 string Book::saveInfo() {
@@ -78,7 +85,7 @@ string Book::saveInfo() {
 	return SS.str();
 }
 void Book::checkOverdue(chrono::year_month_day current) {
-	if (borrowed && current > dueDate) {
+	if (borrowed && (current > dueDate)) {
 		isOverdue = true;
 		auto diff = chrono::sys_days(current) - chrono::sys_days(dueDate);
 		daysOverdue = chrono::duration_cast<chrono::days>(diff).count();

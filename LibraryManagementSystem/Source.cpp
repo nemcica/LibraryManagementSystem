@@ -149,7 +149,7 @@ void update(vector<User>& users, vector<Book>& books, chrono::year_month_day cur
 	for (auto it = users.begin(); it != users.end(); ++it) {
 		for (auto itb = books.begin(); itb != books.end(); ++itb) {
 			if (it->getBorBooks().find(itb->getId()) != string::npos) {
-				it->checkStatus(current, *itb);
+				if (itb->getOverdue()) it->checkStatus(*itb);
 			}
 		}
 	}
@@ -172,7 +172,7 @@ int main() {
 	struct tm now_tm;
 	localtime_s(&now_tm, &now_c);
 
-	chrono::year_month_day current = chrono::year_month_day(chrono::year(now_tm.tm_year+1900), chrono::month(now_tm.tm_mon + 1), chrono::day(now_tm.tm_mday));
+	chrono::year_month_day current = chrono::year_month_day(chrono::year(now_tm.tm_year + 1900), chrono::month(now_tm.tm_mon + 1), chrono::day(now_tm.tm_mday));
 
 	cout << current << endl;
 
@@ -321,7 +321,8 @@ int main() {
 			cout << "-----------------------" << endl;
 			cout << "1. Loan book" << endl;
 			cout << "2. Return book" << endl;
-			cout << "3. Preview Loans" << endl;
+			cout << "3. Extend loan" << endl;
+			cout << "4. Preview Loans" << endl;
 			cin >> choice;
 			switch (choice) {
 			case 1:
@@ -374,10 +375,32 @@ int main() {
 				break;
 
 			case 3:
+				cout << "Enter user ID: " << flush;
+				getline(cin >> ws, userID);
+				cout << "Enter book ID: " << flush;
+				getline(cin >> ws, bookID);
+				for (auto it = Users.begin(); it != Users.end(); ++it) {
+					if (it->getId().find(userID) != string::npos) {
+						for (auto itb = Books.begin(); itb != Books.end(); ++itb) {
+							if (itb->getId().find(bookID) != string::npos) {
+								if (it->getCanBor() && itb->getBorrowed()) {
+									itb->extendLoan();
+								}
+								break;
+							}
+						}
+						break;
+					}
+				}
+				break;
+
+			case 4:
 				for (auto it = Users.begin(); it != Users.end(); ++it) {
 					for (auto itb = Books.begin(); itb != Books.end(); ++itb) {
 						if (it->getBorBooks().find(itb->getId()) != string::npos) {
-							cout << it->getId() << " | " << itb->getId() << endl;
+							cout << it->getName() << " | " << itb->getTitle() << flush;
+							if (itb->getDaysOverdue() > 0) cout << ", Days overdue: " << itb->getDaysOverdue() << flush;
+							cout << endl;
 						}
 					}
 				}

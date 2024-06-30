@@ -30,6 +30,7 @@ public:
 
 	//Getters:
 	string getInfo() const;
+	string getName() const;
 	string getId() const;
 	bool getCanBor() const;
 	string getBorBooks() const;
@@ -43,7 +44,7 @@ public:
 	//Misc:
 	string saveInfo();
 	void checkStatus(chrono::year_month_day in);
-	void checkStatus(chrono::year_month_day in, Book inBook);
+	void checkStatus(Book inBook);
 	bool operator<(const User& other) const;
 
 };

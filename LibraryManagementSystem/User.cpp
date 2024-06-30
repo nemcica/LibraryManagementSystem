@@ -44,6 +44,9 @@ string User::getInfo() const {
 
 	return SS.str();
 }
+string User::getName() const {
+	return name;
+}
 string User::getId() const {
 	return id;
 }
@@ -87,8 +90,10 @@ void User::checkStatus(chrono::year_month_day in) {
 	if (membership < in || borNum >= 3) canBor = false;
 	else canBor = true;
 }
-void User::checkStatus(chrono::year_month_day in, Book inBook) {
-	if (membership < in || borNum >= 3 || inBook.getOverdue()) canBor = false;
+void User::checkStatus(Book inBook) {
+	if (inBook.getOverdue()) {
+		canBor = false;
+	}
 	else canBor = true;
 }
 bool User::operator<(const User& other) const {
