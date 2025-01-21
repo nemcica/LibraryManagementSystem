@@ -1,1 +1,1 @@
-Simple library management system that I made when I started learning C++
+Simple library management system I made when I started learning C++
